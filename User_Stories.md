@@ -9,9 +9,11 @@ Como usuário do sistema, quero pesquisar os filmes disponiveis em streaming, pa
 1. O usuário deve ser capaz de filtrar a pesquisa por categoria, duração, disponibilidade no streaming, etc.
 2. A sinopse deve ser visível antes que o usuário acesse a página de detalhamento do filme.
 
-Prioridade: Alta
-Estimativa: 5 pontos
+## Prioridade
+Alta
 
+## Estimativa
+5 pontos
 
 ## Us2 - Detalhamento do filme
 
@@ -23,8 +25,11 @@ Como usuário do sistema, quero acessar uma página que contenha todas as inform
 2. Deve conter a sinopse completa.
 3. Deve conter links para plataformas de streaming disponíveis.
 
-Prioridade: Alta
-Estimativa: 3 pontos
+## Prioridade
+Alta
+
+## Estimativa
+3 pontos
  
 ## Us3 - Autenticação de usuários
 ### Descrição
@@ -35,5 +40,8 @@ Como futuro usuário, quero conseguir criar uma conta e realizar login no sistem
 2. O sistema deve validar credenciais antes de permitir o login.
 3. O usuário deve poder recuperar a senha em caso de esquecimento.
 
-Prioridade: Alta
-Estimativa: 3 pontos
+## Prioridade
+Alta
+
+## Estimativa
+3 pontos
