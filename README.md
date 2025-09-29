@@ -54,22 +54,16 @@ Isso criará uma cópia local do repositório em sua máquina.
 
 ## Estrutura do Projeto
 
-> *Esta seção pode variar conforme a organização do repositório de cada grupo.*
-
 ```
 Eng-de-Software-UFRN/
 ├── LICENSE
 ├── README.md
-├── <diretório-x>/
-├── <diretório-y>/
-└── <diretório-z>/
+├── User_Stories.md
 ```
 
 - LICENSE: termos da licença do projeto (MIT).
-- README.md: este arquivo de apresentação.
-- X: descrição do diretório X.
-- Y: descrição do diretório Y.
-- Z: descrição do diretório Z.
+- README.md: arquivo de apresentação do projeto.
+- User_Stories.md: arquivo contendo 3 histórias de usuários.
 
 ## Licença
 
