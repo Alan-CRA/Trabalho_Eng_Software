@@ -12,15 +12,14 @@ Repositório de exemplo para as atividades da disciplina de Engenharia de Softwa
 ## Sobre o Projeto
 
 ### Título
-Título do Projeto
+Sistema para pesquisa e recomendação de filmes
 
 ### Descrição
-Descrição do seu projeto.
+O projeto consiste em uma catálogo de filmes, de modo que o usuário consiga procurar, registrar e avaliar filmes. Além disso o sistema irá recomendar filmes de acordo com as preferencias e historico do usuário.
 
 ### Componentes
-- Aluno(a) 1
-- Aluno(a) 2
-- Aluno(a) 3
+- Alan César Rebouças de Araújo Carvalho
+- Francisco Micarlos Teixera Pinto
 
 ## Como clonar ou baixar
 
@@ -29,7 +28,7 @@ Você pode obter este repositório de três formas:
 ### Clonar via HTTPS
 
 ```bash
-git clone https://github.com/mvapedrosa/Eng-de-Software-UFRN.git
+git clone https://github.com/Alan-CRA/Trabalho_Eng_Software.git
 ```
 
 Isso criará uma cópia local do repositório em sua máquina.
@@ -39,7 +38,7 @@ Isso criará uma cópia local do repositório em sua máquina.
 Se você já configurou sua chave SSH no GitHub, pode clonar usando:
 
 ```bash
-git clone git@github.com:mvapedrosa/Eng-de-Software-UFRN.git
+git clone git@github.com:Alan-CRA/Trabalho_Eng_Software.git
 ```
 
 Isso criará uma cópia local do repositório em sua máquina.
@@ -47,7 +46,7 @@ Isso criará uma cópia local do repositório em sua máquina.
 ### Baixar como ZIP
 
 1. Acesse a página do repositório no GitHub:
-   [https://github.com/mvapedrosa/Eng-de-Software-UFRN](https://github.com/mvapedrosa/Eng-de-Software-UFRN)
+   [https://github.com/Alan-CRA/Trabalho_Eng_Software](https://github.com/Alan-CRA/Trabalho_Eng_Software)
 2. Clique no botão **Code** (verde).
 3. Selecione **Download ZIP**.
 4. Extraia o arquivo ZIP para o local desejado em seu computador.
@@ -55,22 +54,16 @@ Isso criará uma cópia local do repositório em sua máquina.
 
 ## Estrutura do Projeto
 
-> *Esta seção pode variar conforme a organização do repositório de cada grupo.*
-
 ```
 Eng-de-Software-UFRN/
 ├── LICENSE
 ├── README.md
-├── <diretório-x>/
-├── <diretório-y>/
-└── <diretório-z>/
+├── User_Stories.md
 ```
 
 - LICENSE: termos da licença do projeto (MIT).
-- README.md: este arquivo de apresentação.
-- X: descrição do diretório X.
-- Y: descrição do diretório Y.
-- Z: descrição do diretório Z.
+- README.md: arquivo de apresentação do projeto.
+- User_Stories.md: arquivo contendo 3 histórias de usuários.
 
 ## Licença
 
