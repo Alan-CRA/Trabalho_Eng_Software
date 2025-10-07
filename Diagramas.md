@@ -17,3 +17,27 @@ A escolha por um **diagrama comportamental** (Diagrama de Atividades) foi feita 
 - Facilita o entendimento das **interações entre usuário e sistema**, servindo como ponte entre os requisitos funcionais (user stories) e a futura implementação.
 
 ---
+
+## 2. Diagrama Estrutural
+
+### Justificativa
+
+Para o diagrama estrutural foi escolhido o diagrama de classes, pois ele é o mais descritivo dos vistos em sala.
+
+### Explicação
+No diagrama existem as seguintes classes:
+
+- Filme
+- Avaliacao
+- Genero
+- Pessoa
+- Usuario
+- Ator
+- FiltroPesquisa
+- Streaming
+- Autenticacao
+
+Onde Usuario e Ator herdam atributos da classe Pessoa.
+
+### Padrões Criados
+Para deixar o diagrama mais limpo, em todas as classes foram colocados os metodos setters() e getters() que abrangem todo os metodos sets e gets necessários em cada classe. 
