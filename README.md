@@ -51,17 +51,21 @@ Eng-de-Software-UFRN/
 ├── README.md
 ├── User_Stories.md
 ├── Diagramas.md
+├── PrincipiosProjeto.md
 └── docs/
-    └── diagramas/
+    ├── diagramas/
         ├── diagrama_comportamental.png
         └── diagrama_classes.png
+    
 ```
 
 - LICENSE: termos da licença do projeto (MIT).
 - README.md: arquivo de apresentação do projeto.
 - User_Stories.md: histórias de usuários.
 - Diagramas.md: explicação textual e justificativa dos diagramas.
+- PrincipiosProjeto.md: Princípios de projetos que serão utilizados no projeto.
 - docs/diagramas: contém as imagens dos diagramas gerados.
+
 
 ## Diagramas
 
