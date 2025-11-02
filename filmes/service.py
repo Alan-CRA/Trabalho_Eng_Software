@@ -9,6 +9,7 @@ class TmdbApiService:
         self.base_url = settings.TMDB_API_BASE_URL
         self.image_base_url = settings.TMDB_IMAGE_BASE_URL
         self.read_token = settings.TMDB_READ_ACCESS_TOKEN
+        
     
     def get_genres(self):
         url = self.base_url + "genre/movie/list?language=pt"
@@ -56,3 +57,5 @@ class TmdbApiService:
         response = requests.get(url, headers=headers)
 
         return response.json()
+    
+    

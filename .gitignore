@@ -1,1 +1,10 @@
+# Python temp files
+__pycache__/
+*.py[cod]
 
+.venv/
+venv/
+
+db.sqlite3
+
+**/migrations/

@@ -8,7 +8,7 @@
 <header>
     <nav>
         <form method="GET" action="{% url 'lista_filmes' %}">
-            <input type="text" name="q" placeholder="Buscar produtos..." value="{{ request.GET.q }}">
+            <input type="text" name="q" placeholder="Buscar produtos..." value="{{ request.GET.q }}" required>
             <button type="submit">Pesquisar</button>
         </form>
     </nav>
@@ -17,5 +17,7 @@
     <h1>Home</h1>
     <a href="{% url 'pages:about' %}">about</a>
     <a href="{% url 'pages:user' %}">user</a>
+    <a href="{% url 'entrar'%}">logar</a>
+    <a href="{% url 'registrar'%}">registrar</a>
 </body>
 </html>

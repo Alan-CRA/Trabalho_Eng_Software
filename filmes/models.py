@@ -34,12 +34,19 @@ class Filme(models.Model):
     atores = models.ManyToManyField(Ator, related_name="filmes")
     streaming = models.ManyToManyField(Streaming, related_name="filmes")
     lancamento = models.CharField(max_length=10)
+    poster = models.TextField(blank=True,null=True)
 
     def __str__(self):
         return self.nome
     
     def filtrar(self):
         pass
+    def get_movies_images_M(self):
+        if self.poster:
+            return 'https://image.tmdb.org/t/p/w200' + self.poster
+    def get_movies_images_G(self):
+        if self.poster:
+            return 'https://image.tmdb.org/t/p/w500' + self.poster
     
 
 class Avaliacao(models.Model):

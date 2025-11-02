@@ -7,8 +7,9 @@ def lista_filmes(request):
     api = TmdbApiService()
     filmes_dict = api.get_movies_by_name(query)
     lista=filmes_dict["results"]
-
+    nomes_pesquisa=[]
     for i in lista:
+        nomes_pesquisa.append(i['title'])
         tmdb_id=i['id']
         if not Filme.objects.filter(id=tmdb_id).exists():
             filme_obj, criado = Filme.objects.update_or_create(
@@ -17,7 +18,8 @@ def lista_filmes(request):
                         'nome': i['title'],
                         'sinopse': i.get('overview'),
                         'nota_media': i.get('vote_average', 0.0),
-                        'lancamento': i.get('release_date',"1111-11-11"),
+                        'lancamento': i.get('release_date','0000-00-00'),
+                        'poster' : i.get('poster_path'),
                     }
                 )
             
@@ -57,8 +59,14 @@ def lista_filmes(request):
                 ids_streamings.append(streaming_obj.id)
                 
             filme_obj.streaming.set(ids_streamings)
-                
     context={
-        "filmes" : Filme.objects.all()
+        "filmes" : Filme.objects.filter(nome__in=nomes_pesquisa),
     }
     return render(request,'filmes/lista_filmes.html',context)
+
+def detalhes(request):
+    movieid = request.GET.get('id')
+    context={
+        "filme" : Filme.objects.get(id = movieid),
+    }
+    return render(request,'filmes/detalhes.html',context)

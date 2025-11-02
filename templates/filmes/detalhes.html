@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h4>detalhes</h4>
+
+    <img src="{{ filme.get_movies_images_G }}">
+    
+    <h4> Sinopse: {{ filme.sinopse }}</h4>
+    <h4> Nota: {{ filme.nota_media }}</h4>
+    <h4> Data de Lancamento: {{ filme.lancamento }}</h4>
+    <div style="display: flex; align-items: center; gap: 5px;">
+        <h4> Streamings Disponiveis:</h4>
+        {% if filme.streamig.all%}
+            {% for i in filme.streaming.all %}
+                <h4>{{ i.nome }},</h4>
+            {% endfor %}
+        {% else %}
+            <h4>Não informado</h4>
+        {% endif %}
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 5px;">
+        <h4> Atores Principais:</h4>
+        {% if filme.atores.all%}
+            {% for i in filme.atores.all %}    
+                <h4>{{ i.nome }},</h4>
+            {% endfor %}
+        {% else %}
+            <h4>Não informado</h4>
+        {% endif %}
+    </div>
+    
+
+</body>
+</html>
