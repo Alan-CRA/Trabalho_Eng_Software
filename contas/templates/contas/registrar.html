@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Registrar • CineRecomenda{% endblock %}
+{% block content %}
+<section class="mx-auto max-w-md">
+  <a href="{% url 'pages:home' %}" class="mx-auto mb-8 flex w-fit items-center gap-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400/40">
+    <span class="grid h-10 w-10 place-items-center rounded-xl bg-[var(--rose)] shadow">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M3 7h18v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm0-2a2 2 0 0 1 2-2h3l2 2H3Zm9 0 2 2h7V5a2 2 0 0 0-2-2h-7Z" />
+      </svg>
+    </span>
+    <span class="text-xl font-semibold text-white tracking-tight">Cine<span class="text-rose-500">Recomenda</span></span>
+  </a>
+
+  <div class="rounded-2xl border border-white/10 bg-[var(--card)] p-8 shadow-[0_20px_60px_rgba(0,0,0,.35)]">
+    <h1 class="text-2xl font-semibold text-zinc-50">Crie sua conta</h1>
+    <p class="mt-2 text-sm text-zinc-400">Cadastre-se para salvar favoritos e receber recomendações exclusivas.</p>
+    <form method="post" class="mt-8 space-y-4">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
+          {{ form.non_field_errors|join:"<br>"|safe }}
+        </div>
+      {% endif %}
+      <div>
+        <label for="username" class="sr-only">Usuário</label>
+        <input id="username" name="username" value="{{ form.username.value|default:'' }}" placeholder="Usuário" required
+               class="h-12 w-full rounded-xl bg-white/5 border border-white/10 px-4 text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-400/40" />
+        {% for err in form.username.errors %}
+          <p class="mt-2 text-sm text-rose-300">{{ err }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label for="email" class="sr-only">E-mail</label>
+        <input id="email" name="email" value="{{ form.email.value|default:'' }}" placeholder="E-mail"
+               class="h-12 w-full rounded-xl bg-white/5 border border-white/10 px-4 text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-400/40" />
+        {% for err in form.email.errors %}
+          <p class="mt-2 text-sm text-rose-300">{{ err }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label for="password" class="sr-only">Senha</label>
+        <input id="password" type="password" name="password" placeholder="Senha" required
+               class="h-12 w-full rounded-xl bg-white/5 border border-white/10 px-4 text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-400/40" />
+        {% for err in form.password.errors %}
+          <p class="mt-2 text-sm text-rose-300">{{ err }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label for="password2" class="sr-only">Confirme a senha</label>
+        <input id="password2" type="password" name="password2" placeholder="Confirme a senha" required
+               class="h-12 w-full rounded-xl bg-white/5 border border-white/10 px-4 text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-400/40" />
+        {% for err in form.password2.errors %}
+          <p class="mt-2 text-sm text-rose-300">{{ err }}</p>
+        {% endfor %}
+      </div>
+      <button class="h-12 w-full rounded-xl bg-rose-600 text-base font-semibold text-white transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-400/40">Criar conta</button>
+    </form>
+    <p class="mt-6 text-sm text-zinc-400">Já possui uma conta? <a class="font-medium text-rose-400 hover:text-rose-300" href="{% url 'contas:entrar' %}">Entrar</a></p>
+  </div>
+</section>
+{% endblock %}

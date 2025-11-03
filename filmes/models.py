@@ -1,59 +1,56 @@
 from django.db import models
-from django.conf import settings
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class Genero(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-
-
-class Streaming(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
+    nome = models.CharField(max_length=120, unique=True)
+    def __str__(self): return self.nome
 
 class Ator(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=200, unique=True)
+    def __str__(self): return self.nome
 
-    def __str__(self):
-        return self.nome
-
+class Streaming(models.Model):
+    nome = models.CharField(max_length=200, unique=True)
+    def __str__(self): return self.nome
 
 class Filme(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nome = models.CharField(max_length=150)
-    sinopse = models.TextField()
-    nota_media = models.FloatField()
-    generos = models.ManyToManyField(Genero, related_name="filmes")
-    atores = models.ManyToManyField(Ator, related_name="filmes")
-    streaming = models.ManyToManyField(Streaming, related_name="filmes")
-    lancamento = models.CharField(max_length=10)
-    poster = models.TextField(blank=True,null=True)
+    tmdb_id = models.PositiveIntegerField(unique=True)
+    nome = models.CharField(max_length=255)
+    lancamento = models.CharField(max_length=20, blank=True, null=True)
+    tempo = models.PositiveIntegerField(blank=True, null=True)  # minutos
+    sinopse = models.TextField(blank=True, null=True)
+    nota_media = models.FloatField(blank=True, null=True)
+    poster_path = models.CharField(max_length=300, blank=True, null=True)
+    backdrop_path = models.CharField(max_length=300, blank=True, null=True)
+
+    genero = models.ManyToManyField(Genero, blank=True)
+    atores = models.ManyToManyField(Ator, blank=True)
+    streaming = models.ManyToManyField(Streaming, blank=True)
+
+    atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.nome
-    
-    def filtrar(self):
-        pass
-    def get_movies_images_M(self):
-        if self.poster:
-            return 'https://image.tmdb.org/t/p/w200' + self.poster
-    def get_movies_images_G(self):
-        if self.poster:
-            return 'https://image.tmdb.org/t/p/w500' + self.poster
-    
+        return f"{self.nome} ({self.tmdb_id})"
+
+    def poster_url(self, size='w342', base=None):
+        base = base or "https://image.tmdb.org/t/p/"
+        return f"{base}{size}{self.poster_path}" if self.poster_path else ""
+
+    def backdrop_url(self, size='w780', base=None):
+        base = base or "https://image.tmdb.org/t/p/"
+        return f"{base}{size}{self.backdrop_path}" if self.backdrop_path else ""
 
 class Avaliacao(models.Model):
-    filme = models.ForeignKey(Filme, on_delete=models.CASCADE, related_name="avaliacoes")
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="avaliacoes")
-    nota = models.PositiveSmallIntegerField()
-    comentario = models.TextField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    filme = models.ForeignKey(Filme, on_delete=models.CASCADE)
+    nota = models.PositiveIntegerField()  # 1..10
+    comentario = models.TextField(blank=True, null=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'filme')
 
     def __str__(self):
-        return f"{self.usuario.username} - {self.filme.nome} ({self.nota})"
+        return f"{self.user} - {self.filme} ({self.nota})"

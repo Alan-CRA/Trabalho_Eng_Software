@@ -1,11 +1,12 @@
 from django.contrib import admin
-from django.conf import settings
-# Register your models here.
-from .models import Filme,Genero,Avaliacao,Ator,Streaming
+from .models import Filme, Genero, Ator, Streaming, Avaliacao
 
-admin.site.register(Filme)
+@admin.register(Filme)
+class FilmeAdmin(admin.ModelAdmin):
+    list_display = ("tmdb_id","nome","lancamento","nota_media","atualizado_em")
+    search_fields = ("nome",)
+
 admin.site.register(Genero)
-admin.site.register(Avaliacao)
 admin.site.register(Ator)
 admin.site.register(Streaming)
-
+admin.site.register(Avaliacao)

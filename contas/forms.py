@@ -1,14 +1,16 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Usuario
+from django.contrib.auth.models import User
 
-class RegistroForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+class RegistrarForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput, label="Confirme a senha")
 
     class Meta:
-        model = Usuario
-        fields = ['username', 'email', 'password1', 'password2']
+        model = User
+        fields = ("username", "email")
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(label="Nome de Usuário")
-    password = forms.CharField(widget=forms.PasswordInput)
+    def clean(self):
+        data = super().clean()
+        if data.get("password") != data.get("password2"):
+            raise forms.ValidationError("As senhas não conferem.")
+        return data

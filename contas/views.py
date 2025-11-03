@@ -1,37 +1,38 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from django.contrib import messages
-from .forms import RegistroForm, LoginForm
-# Create your views here.
-def user(request):
-    return render(request,'contas/user.html')
+from django.contrib.auth.decorators import login_required
+from django.views import View
+from .forms import RegistrarForm
 
+class Entrar(View):
+    template_name = "contas/entrar.html"
+    def get(self, request):
+        return render(request, self.template_name)
+    def post(self, request):
+        user = authenticate(username=request.POST.get("username"), password=request.POST.get("password"))
+        if user:
+            login(request, user)
+            return redirect("/contas/usuario/")
+        return render(request, self.template_name, {"erro": "Credenciais inválidas."})
 
-def registrar(request):
-    if request.method == "POST":
-        form = RegistroForm(request.POST)
+class Registrar(View):
+    template_name = "contas/registrar.html"
+    def get(self, request):
+        return render(request, self.template_name, {"form": RegistrarForm()})
+    def post(self, request):
+        form = RegistrarForm(request.POST)
         if form.is_valid():
-            usuario = form.save()
-            login(request, usuario)
-            messages.success(request, "Conta criada com sucesso!")
-            return redirect('pages:home')
-    else:
-        form = RegistroForm()
-    return render(request, "contas/register.html", {"form": form})
+            u = form.save(commit=False)
+            u.set_password(form.cleaned_data["password"])
+            u.save()
+            login(request, u)
+            return redirect("/contas/usuario/")
+        return render(request, self.template_name, {"form": form})
 
-def entrar(request):
-    if request.method == "POST":
-        form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            usuario = form.get_user()
-            login(request, usuario)
-            messages.success(request, f"Bem-vindo, {usuario.username}!")
-            return redirect('pages:home')
-    else:
-        form = LoginForm()
-    return render(request, "contas/login.html", {"form": form})
+@login_required
+def perfil(request):
+    return render(request, "contas/perfil.html")
 
 def sair(request):
     logout(request)
-    messages.info(request, "Você saiu da sua conta.")
-    return redirect('pages:home')
+    return redirect("/")
