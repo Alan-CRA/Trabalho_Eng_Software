@@ -73,9 +73,26 @@ Eng-de-Software-UFRN/
 ├── Diagramas.md
 ├── PrincipiosProjeto.md
 └── docs/
-    ├── diagramas/
+    └── ... diagramas/
         ├── diagrama_comportamental.png
         └── diagrama_classes.png
+├── config/
+    └── ...
+├── contas/
+    └── ...
+├── filmes/
+    └── ...
+├── pages/
+    └── ...
+├── scripts/
+    └── ...
+├── static/
+    └── ...
+├── templates/
+    └── ...
+├── .env
+├── manage.py
+└── requirements.txt
     
 ```
 
