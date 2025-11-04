@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}CineRecomenda{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="{% static 'img/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
+  <style>
+    :root{
+      --bg:#0f1115; --card:#13151b; --muted:#9ca3af;
+      --border:#23252b; --rose:#e11d48; --rose-2:#be123c;
+    }
+    .line-clamp-1{-webkit-line-clamp:1;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+    .line-clamp-2{-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+  </style>
+</head>
+<body class="bg-[var(--bg)] text-zinc-100 antialiased">
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-black/35 border-b border-white/10 relative before:content-[''] before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/15 before:to-transparent">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400/40" aria-label="Página inicial">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-[var(--rose)] shadow">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 7h18v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm2-4h3l2 2H5a2 2 0 0 1-2-2Zm9 0 2 2h3a2 2 0 0 0-2-2h-3Z" />
+          </svg>
+        </span>
+        <span class="text-xl font-semibold tracking-tight">Cine<span class="text-[var(--rose)]">Recomenda</span></span>
+      </a>
+
+      <nav class="flex items-center gap-2 sm:gap-3">
+        {% if request.user.is_authenticated %}
+          {% with display_name=request.user.get_full_name|default:request.user.username %}
+            {% with initial=display_name|slice:":1"|default:"?"|upper %}
+              <a href="/contas/usuario/" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/10 text-sm font-semibold text-white shadow transition hover:border-[var(--rose)]/40 focus:outline-none focus:ring-2 focus:ring-rose-400/40" aria-label="Minha conta">
+                {{ initial }}
+              </a>
+            {% endwith %}
+          {% endwith %}
+          <a href="/contas/sair/" class="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-rose-400/40">Sair</a>
+        {% else %}
+          <a href="/contas/entrar/" class="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-rose-400/40">Login</a>
+          <a href="/contas/registrar/" class="px-4 py-1.5 rounded-full bg-[var(--rose)] hover:bg-[var(--rose-2)] text-sm font-medium text-white shadow focus:outline-none focus:ring-2 focus:ring-rose-400/40">Cadastrar</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-6 text-sm text-zinc-400 flex items-center justify-between">
+      <span>CineRecomenda • Django • TMDB</span>
+      <span>© {% now 'Y' %}</span>
+    </div>
+  </footer>
+</body>
+</html>

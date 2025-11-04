@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Início • CineRecomenda{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="mb-10 md:mb-14">
+  <div class="rounded-3xl border border-white/10 bg-gradient-to-b from-[rgba(225,29,72,0.20)] via-[rgba(225,29,72,0.06)] to-transparent p-6 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,.35)]">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="uppercase tracking-widest text-xs text-zinc-400">Descubra seu próximo filme favorito</p>
+      <h1 class="mt-2 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
+        Bem-vindo ao <span class="text-[var(--rose)]">CineRecomenda</span>
+      </h1>
+      <p class="mt-4 text-zinc-400">Explore recomendações personalizadas, acompanhe lançamentos e encontre onde assistir.</p>
+
+      <form method="GET" action="{% url 'filmes:lista_filmes' %}" class="mt-8 flex gap-2 sm:gap-3 justify-center">
+        <div class="relative w-full max-w-2xl">
+          <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-3.5-3.5" />
+            </svg>
+          </span>
+          <input name="q" value="{{ request.GET.q }}" required aria-label="Buscar filmes"
+                 placeholder="Busque por títulos, atores ou gêneros"
+                 class="h-12 sm:h-14 w-full rounded-2xl bg-white/5 border border-white/10 pl-12 pr-4 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-400/40">
+        </div>
+        <button type="submit" class="h-12 sm:h-14 px-5 sm:px-6 rounded-2xl bg-[var(--rose)] hover:bg-[var(--rose-2)] text-white font-medium transition focus:outline-none focus:ring-2 focus:ring-rose-400/40" aria-label="Buscar filmes">
+          Buscar
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- TENDÊNCIAS -->
+<section class="space-y-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight">Tendências</h2>
+      <p class="text-zinc-400">O que está chamando atenção agora entre os cinéfilos.</p>
+    </div>
+    <div class="inline-flex items-center gap-2 rounded-full bg-white/5 p-1 border border-white/10">
+      {% for group in trending_groups %}
+        <button type="button" data-trending-toggle="{{ group.key }}"
+                class="trending-tab px-3 sm:px-4 h-9 rounded-full bg-transparent text-sm font-medium text-zinc-300 transition focus:outline-none focus:ring-2 focus:ring-rose-400/40"
+                {% if forloop.first %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>
+          {{ group.label }}
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% for group in trending_groups %}
+    <div class="trending-panel {% if not forloop.first %}hidden{% endif %}" data-trending-panel="{{ group.key }}">
+      {% if group.movies %}
+        <div class="flex gap-4 sm:gap-6 overflow-x-auto pb-4">
+          {% for movie in group.movies %}
+            <a href="{% url 'filmes:detalhes' %}?id={{ movie.id }}"
+               class="group relative w-40 sm:w-48 flex-shrink-0 rounded-3xl border border-white/10 bg-[var(--card)] hover:border-[var(--rose)]/40 hover:-translate-y-0.5 hover:shadow-xl transition">
+              <div class="relative overflow-hidden rounded-3xl">
+                {% if movie.poster_path %}
+                  <img src="{{ IMG }}w342{{ movie.poster_path }}" alt="{{ movie.title }}"
+                       class="h-60 sm:h-72 w-full object-cover" />
+                {% else %}
+                  <div class="h-60 sm:h-72 w-full grid place-items-center text-xs text-zinc-500">Sem imagem</div>
+                {% endif %}
+                {% if movie.score != None %}
+                  <span class="absolute bottom-3 left-4 inline-flex h-10 w-10 items-center justify-center rounded-full border-4 border-[var(--rose)]/60 bg-black/70 text-sm font-semibold text-white shadow">{{ movie.score }}<span class="text-[10px] font-medium">%</span></span>
+                {% else %}
+                  <span class="absolute bottom-3 left-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-xs font-medium text-zinc-300 shadow">NR</span>
+                {% endif %}
+              </div>
+              <div class="p-4">
+                <h3 class="text-sm font-semibold text-zinc-100 line-clamp-2">{{ movie.title }}</h3>
+                {% if movie.release_display %}
+                  <p class="mt-2 text-xs text-zinc-400">{{ movie.release_display }}</p>
+                {% endif %}
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-sm text-zinc-400">Não foi possível carregar os filmes em destaque agora.</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+</section>
+
+{% if now_playing %}
+<section class="mt-12 space-y-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight">Em cartaz</h2>
+      <p class="text-zinc-400">Lançamentos que acabaram de chegar às telonas.</p>
+    </div>
+    <a href="{% url 'filmes:lista_filmes' %}" class="hidden sm:inline-flex items-center px-3 h-9 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-rose-400/40">Ver todos</a>
+  </div>
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+    {% for movie in now_playing %}
+      <a href="{% url 'filmes:detalhes' %}?id={{ movie.id }}"
+         class="group rounded-2xl overflow-hidden border border-white/10 bg-[var(--card)] hover:border-[var(--rose)]/40 hover:-translate-y-0.5 hover:shadow-xl transition">
+        {% if movie.poster_path %}
+          <img src="{{ IMG }}w342{{ movie.poster_path }}" alt="{{ movie.title }}"
+               class="w-full aspect-[2/3] object-cover" />
+        {% else %}
+          <div class="w-full aspect-[2/3] grid place-items-center text-xs text-zinc-500">Sem imagem</div>
+        {% endif %}
+        <div class="p-4">
+          <h3 class="text-base font-semibold line-clamp-1">{{ movie.title }}</h3>
+          {% if movie.release_display %}
+            <p class="mt-2 text-xs text-zinc-400">{{ movie.release_display }}</p>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggles = document.querySelectorAll('[data-trending-toggle]');
+    const panels = document.querySelectorAll('[data-trending-panel]');
+
+    function activate(key) {
+      panels.forEach(panel => {
+        panel.classList.toggle('hidden', panel.dataset.trendingPanel !== key);
+      });
+      toggles.forEach(button => {
+        const isActive = button.dataset.trendingToggle === key;
+        button.classList.toggle('bg-[var(--rose)]', isActive);
+        button.classList.toggle('text-white', isActive);
+        button.classList.toggle('bg-transparent', !isActive);
+        button.classList.toggle('text-zinc-300', !isActive);
+        button.setAttribute('aria-pressed', isActive);
+      });
+    }
+
+    if (toggles.length) {
+      activate(toggles[0].dataset.trendingToggle);
+      toggles.forEach(button => {
+        button.addEventListener('click', () => activate(button.dataset.trendingToggle));
+      });
+    }
+  });
+</script>
+{% endblock %}

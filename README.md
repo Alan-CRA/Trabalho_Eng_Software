@@ -43,6 +43,26 @@ git clone git@github.com:Alan-CRA/Trabalho_Eng_Software.git
 3. Selecione **Download ZIP**.
 4. Extraia o arquivo ZIP para o local desejado em seu computador.
 
+## Rodando localmente
+```bash
+python -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+# .venv\Scripts\activate  # Windows
+
+pip install -r requirements.txt
+cp .env.example .env
+# edite .env e coloque seu TMDB_READ_ACCESS_TOKEN
+
+python manage.py migrate
+python manage.py runserver
+# http://127.0.0.1:8000
+```
+
+## Notas
+- Tailwind via CDN no `templates/base.html`.
+- Integração TMDB com cache local em `filmes/`.
+
+
 ## Estrutura do Projeto
 
 ```
@@ -53,9 +73,26 @@ Eng-de-Software-UFRN/
 ├── Diagramas.md
 ├── PrincipiosProjeto.md
 └── docs/
-    ├── diagramas/
+    └── ... diagramas/
         ├── diagrama_comportamental.png
         └── diagrama_classes.png
+├── config/
+    └── ...
+├── contas/
+    └── ...
+├── filmes/
+    └── ...
+├── pages/
+    └── ...
+├── scripts/
+    └── ...
+├── static/
+    └── ...
+├── templates/
+    └── ...
+├── .env
+├── manage.py
+└── requirements.txt
     
 ```
 

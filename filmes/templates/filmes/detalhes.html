@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ filme.nome }} • CineRecomenda{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 gap-10 md:grid-cols-3">
+  <div>
+    <div class="overflow-hidden rounded-2xl border border-white/10 bg-[#121317] shadow-[0_8px_24px_rgba(0,0,0,.35)]">
+      {% if filme.poster_path %}
+        <img src="{{ IMG }}w500{{ filme.poster_path }}" alt="{{ filme.nome }}"
+             class="w-full object-cover" />
+      {% else %}
+        <div class="grid h-full place-items-center px-6 py-12 text-sm text-zinc-500">Sem imagem disponível</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="md:col-span-2 space-y-6">
+    <div>
+      <h1 class="text-3xl font-bold text-zinc-50 md:text-4xl">{{ filme.nome }}</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-4 text-sm text-zinc-300">
+        <span class="flex items-center gap-2">
+          <svg class="h-4 w-4 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="m12 3 2.1 6.47H21l-4.8 3.49L18.3 21 12 16.98 5.7 21l1.8-8.04L2 9.47h6.9L12 3Z" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Nota {{ filme.nota_media|default:"—" }}
+        </span>
+        <span class="flex items-center gap-2">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M6 3h12a2 2 0 0 1 2 2v14l-4-3-4 3-4-3-4 3V5a2 2 0 0 1 2-2Z" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          {{ filme.lancamento|default:"—" }}
+        </span>
+        <span class="flex items-center gap-2">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          {{ filme.tempo|default:"—" }} min
+        </span>
+      </div>
+    </div>
+
+    {% if filme.sinopse %}
+      <div class="space-y-3">
+        <h2 class="text-lg font-semibold text-zinc-100">Sinopse</h2>
+        <p class="text-base leading-relaxed text-zinc-300">{{ filme.sinopse }}</p>
+      </div>
+    {% endif %}
+
+    <div class="space-y-3">
+      <h2 class="text-lg font-semibold text-zinc-100">Gêneros</h2>
+      <div class="flex flex-wrap gap-2">
+        {% for g in filme.genero.all %}
+          <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-200">{{ g.nome }}</span>
+        {% empty %}
+          <span class="text-sm text-zinc-500">—</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <h2 class="text-lg font-semibold text-zinc-100">Elenco</h2>
+      <div class="flex flex-wrap gap-2">
+        {% for a in filme.atores.all %}
+          <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-200">{{ a.nome }}</span>
+        {% empty %}
+          <span class="text-sm text-zinc-500">—</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <h2 class="text-lg font-semibold text-zinc-100">Onde assistir</h2>
+      <div class="flex flex-wrap gap-2">
+        {% for s in filme.streaming.all %}
+          <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-200">{{ s.nome }}</span>
+        {% empty %}
+          <span class="text-sm text-zinc-500">—</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 pt-2">
+      <a href="{% url 'pages:home' %}" class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-medium text-zinc-100 transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-rose-400/40">← Voltar</a>
+      <a href="{% url 'filmes:lista_filmes' %}?q={{ filme.nome|urlencode }}" class="inline-flex items-center gap-2 rounded-full bg-rose-600 px-5 py-2 text-sm font-medium text-white shadow transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-400/40">Buscar similares</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
