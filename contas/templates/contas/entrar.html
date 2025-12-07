@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Entrar • CineRecomenda{% endblock %}
+{% block content %}
+<section class="mx-auto max-w-md">
+  <a href="{% url 'pages:home' %}"
+    class="mx-auto mb-8 flex w-fit items-center gap-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400/40">
+    <span class="grid h-10 w-10 place-items-center rounded-xl bg-[var(--rose)] shadow">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor"
+        aria-hidden="true">
+        <path
+          d="M3 7h18v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm0-2a2 2 0 0 1 2-2h3l2 2H3Zm9 0 2 2h7V5a2 2 0 0 0-2-2h-7Z" />
+      </svg>
+    </span>
+    <span class="text-xl font-semibold text-white tracking-tight">Cine<span
+        class="text-rose-500">Recomenda</span></span>
+  </a>
+
+  <div class="rounded-2xl border border-white/10 bg-[var(--card)] p-8 shadow-[0_20px_60px_rgba(0,0,0,.35)]">
+    <h1 class="text-2xl font-semibold text-zinc-50">Bem-vindo de volta</h1>
+    <p class="mt-2 text-sm text-zinc-400">Acesse sua conta para continuar explorando recomendações personalizadas.</p>
+    <form method="post" class="mt-8 space-y-4">
+      {% csrf_token %}
+      {% if request.GET.next %}
+      <input type="hidden" name="next" value="{{ request.GET.next }}">
+      {% endif %}
+      <div>
+        <label for="username" class="sr-only">Usuário</label>
+        <input id="username" name="username" placeholder="Usuário" required
+          class="h-12 w-full rounded-xl bg-white/5 border border-white/10 px-4 text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-400/40" />
+      </div>
+      <div>
+        <label for="password" class="sr-only">Senha</label>
+        <input id="password" type="password" name="password" placeholder="Senha" required
+          class="h-12 w-full rounded-xl bg-white/5 border border-white/10 px-4 text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-400/40" />
+      </div>
+      {% if erro %}
+      <div class="rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">{{ erro }}</div>
+      {% endif %}
+      <button
+        class="h-12 w-full rounded-xl bg-rose-600 text-base font-semibold text-white transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-400/40">Entrar</button>
+    </form>
+    <p class="mt-6 text-sm text-zinc-400">Ainda não tem conta? <a class="font-medium text-rose-400 hover:text-rose-300"
+        href="{% url 'contas:registrar' %}">Cadastrar-se</a></p>
+  </div>
+</section>
+{% endblock %}
