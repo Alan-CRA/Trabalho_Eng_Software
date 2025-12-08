@@ -91,7 +91,7 @@
   {% if messages %}
   <div class="max-w-7xl mx-auto px-4 md:px-6 pt-4">
     {% for message in messages %}
-    <div class="mb-3 flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium shadow-lg backdrop-blur-sm animate-[fadeIn_0.3s_ease-out]
+    <div data-message class="mb-3 flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium shadow-lg backdrop-blur-sm animate-[fadeIn_0.3s_ease-out]
         {% if message.tags == 'success' %}
           bg-emerald-500/15 border border-emerald-500/30 text-emerald-300
         {% elif message.tags == 'error' %}
@@ -146,6 +146,23 @@
       <span>© {% now 'Y' %}</span>
     </div>
   </footer>
+
+  <!-- Script para auto-fechar mensagens em 5 segundos -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const messages = document.querySelectorAll('[data-message]');
+      messages.forEach(function (msg) {
+        setTimeout(function () {
+          msg.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+          msg.style.opacity = '0';
+          msg.style.transform = 'translateY(-10px)';
+          setTimeout(function () {
+            msg.remove();
+          }, 500);
+        }, 5000);
+      });
+    });
+  </script>
 </body>
 
 </html>
