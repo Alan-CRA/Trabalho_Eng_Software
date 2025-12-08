@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Minhas Avaliações • CineRecomenda{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h1 class="text-3xl font-bold text-zinc-50">Minhas Avaliações</h1>
+<p class="text-zinc-400 mt-1">{{ total }} filme{{ total|pluralize:"s" }} avaliado{{ total|pluralize:"s" }}</p>
+</div>
+<a href="{% url 'contas:perfil' %}" class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-100 transition hover:bg-white/10">← Voltar ao Perfil</a>
+</div>
+{% if avaliacoes %}
+<div class="space-y-4">
+{% for av in avaliacoes %}
+<div class="rounded-2xl border border-white/10 bg-[#18191f] p-4 hover:border-white/20 transition">
+<a href="/filmes/detalhes?id={{ av.filme.tmdb_id }}" class="flex gap-4 group">
+<div class="flex-shrink-0 w-20 h-28 rounded-xl overflow-hidden bg-zinc-800">
+{% if av.filme.poster_path %}<img src="https://image.tmdb.org/t/p/w154{{ av.filme.poster_path }}" alt="Poster" class="w-full h-full object-cover">{% else %}<div class="w-full h-full flex items-center justify-center text-xs text-zinc-500">—</div>{% endif %}
+</div>
+<div class="flex-1 min-w-0">
+{% with nome=av.filme.nome %}<h3 class="text-lg font-semibold text-zinc-100 group-hover:text-rose-400 transition truncate">{{ nome }}</h3>{% endwith %}
+<p class="text-sm text-zinc-500 mt-1">{{ av.criado_em|date:"d/m/Y" }}</p>
+<div class="flex items-center gap-1 mt-2">
+<span class="text-amber-400 font-semibold">★ {{ av.nota }}/10</span>
+</div>
+{% if av.comentario %}<p class="text-sm text-zinc-300 mt-3 line-clamp-2">{{ av.comentario }}</p>{% endif %}
+</div>
+</a>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="rounded-2xl border border-white/10 bg-[#18191f] p-12 text-center">
+<h3 class="text-xl font-semibold text-zinc-100 mb-2">Nenhuma avaliação</h3>
+<p class="text-zinc-400 mb-6">Você ainda não avaliou nenhum filme.</p>
+<a href="/" class="inline-flex items-center gap-2 rounded-full bg-rose-600 hover:bg-rose-700 px-6 py-3 text-sm font-medium text-white shadow transition">Explorar Filmes</a>
+</div>
+{% endif %}
+</div>
+{% endblock %}

@@ -132,7 +132,8 @@
                 </svg>
             </a>
             <!-- Minhas Avaliações -->
-            <a href="#" class="flex items-center justify-between px-6 py-4 hover:bg-white/5 transition group">
+            <a href="{% url 'contas:minhas_avaliacoes' %}"
+                class="flex items-center justify-between px-6 py-4 hover:bg-white/5 transition group">
                 <div class="flex items-center gap-4">
                     <div
                         class="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-zinc-400 group-hover:text-zinc-200">
@@ -144,6 +145,27 @@
                     <div>
                         <p class="font-medium text-zinc-100">Minhas Avaliações</p>
                         <p class="text-sm text-zinc-500">Veja e gerencie suas avaliações de filmes</p>
+                    </div>
+                </div>
+                <svg class="h-5 w-5 text-zinc-500 group-hover:text-zinc-300 transition" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+            <!-- Meus Favoritos -->
+            <a href="{% url 'contas:meus_favoritos' %}"
+                class="flex items-center justify-between px-6 py-4 hover:bg-white/5 transition group">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="grid h-10 w-10 place-items-center rounded-xl bg-rose-500/15 text-rose-400 group-hover:text-rose-300">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-medium text-zinc-100">Meus Favoritos</p>
+                        <p class="text-sm text-zinc-500">Filmes que você salvou para assistir</p>
                     </div>
                 </div>
                 <svg class="h-5 w-5 text-zinc-500 group-hover:text-zinc-300 transition" fill="none"

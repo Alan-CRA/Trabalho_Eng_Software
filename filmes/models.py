@@ -54,3 +54,18 @@ class Avaliacao(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.filme} ({self.nota})"
+
+
+class Favorito(models.Model):
+    """Filmes salvos/favoritos do usuário."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    filme = models.ForeignKey(Filme, on_delete=models.CASCADE)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'filme')
+        ordering = ['-criado_em']
+
+    def __str__(self):
+        return f"{self.user} ❤️ {self.filme}"
+

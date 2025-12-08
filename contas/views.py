@@ -79,22 +79,58 @@ class Registrar(View):
 @login_required(login_url="contas:entrar")
 def perfil(request):
     """View do perfil do usuário logado."""
-    from filmes.models import Avaliacao
+    from filmes.models import Avaliacao, Favorito
     
     # Avaliações do usuário
     avaliacoes = Avaliacao.objects.filter(
         user=request.user
     ).select_related('filme').order_by('-criado_em')
     
+    # Favoritos do usuário
+    favoritos = Favorito.objects.filter(user=request.user)
+    
     total_avaliacoes = avaliacoes.count()
+    total_favoritos = favoritos.count()
     
     context = {
-        "avaliacoes": avaliacoes[:10],  # Últimas 10 avaliações
+        "avaliacoes": avaliacoes[:5],  # Últimas 5 avaliações no perfil
         "total_avaliacoes": total_avaliacoes,
-        "total_favoritos": 0,  # TODO: implementar favoritos
+        "total_favoritos": total_favoritos,
         "filmes_vistos": total_avaliacoes,
     }
     return render(request, "contas/perfil.html", context)
+
+
+@login_required(login_url="contas:entrar")
+def minhas_avaliacoes(request):
+    """View para listar todas as avaliações do usuário."""
+    from filmes.models import Avaliacao
+    
+    avaliacoes = Avaliacao.objects.filter(
+        user=request.user
+    ).select_related('filme').order_by('-criado_em')
+    
+    context = {
+        "avaliacoes": avaliacoes,
+        "total": avaliacoes.count(),
+    }
+    return render(request, "contas/minhas_avaliacoes.html", context)
+
+
+@login_required(login_url="contas:entrar")
+def meus_favoritos(request):
+    """View para listar todos os filmes favoritos do usuário."""
+    from filmes.models import Favorito
+    
+    favoritos = Favorito.objects.filter(
+        user=request.user
+    ).select_related('filme').order_by('-criado_em')
+    
+    context = {
+        "favoritos": favoritos,
+        "total": favoritos.count(),
+    }
+    return render(request, "contas/meus_favoritos.html", context)
 
 
 def sair(request):
@@ -103,3 +139,4 @@ def sair(request):
         messages.success(request, "Você saiu da sua conta. Até logo!")
     logout(request)
     return redirect("pages:home")
+

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Meus Favoritos • CineRecomenda{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-zinc-50 flex items-center gap-3">
+                <svg class="h-8 w-8 text-rose-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                Meus Favoritos
+            </h1>
+            <p class="text-zinc-400 mt-1">{{ total }} filme{{ total|pluralize:"s" }} salvo{{ total|pluralize:"s" }}</p>
+        </div>
+        <a href="{% url 'contas:perfil' %}"
+            class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-100 transition hover:bg-white/10">
+            ← Voltar ao Perfil
+        </a>
+    </div>
+
+    {% if favoritos %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {% for fav in favoritos %}
+        <a href="/filmes/detalhes?id={{ fav.filme.tmdb_id }}" class="group">
+            <div class="aspect-[2/3] rounded-xl overflow-hidden border border-white/10 bg-zinc-800 relative">
+                {% if fav.filme.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w342{{ fav.filme.poster_path }}" alt="{{ fav.filme.nome }}"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center text-zinc-500">
+                    <svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                            d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                    </svg>
+                </div>
+                {% endif %}
+                <!-- Overlay com coração -->
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="absolute bottom-2 right-2">
+                        <svg class="h-6 w-6 text-rose-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            {% with nome=fav.filme.nome %}<h3
+                class="mt-2 text-sm font-medium text-zinc-200 group-hover:text-rose-400 transition truncate">{{ nome }}
+            </h3>{% endwith %}
+            <p class="text-xs text-zinc-500">{{ fav.criado_em|date:"d/m/Y" }}</p>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="rounded-2xl border border-white/10 bg-[#18191f] p-12 text-center">
+        <div class="grid h-16 w-16 mx-auto mb-4 place-items-center rounded-full bg-zinc-800">
+            <svg class="h-8 w-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-zinc-100 mb-2">Nenhum favorito</h3>
+        <p class="text-zinc-400 mb-6">Você ainda não salvou nenhum filme aos favoritos.</p>
+        <a href="/"
+            class="inline-flex items-center gap-2 rounded-full bg-rose-600 hover:bg-rose-700 px-6 py-3 text-sm font-medium text-white shadow transition">
+            Explorar Filmes
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

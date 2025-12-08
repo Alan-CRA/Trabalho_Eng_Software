@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.conf import settings
-from .models import Filme, Genero, Ator, Streaming, Avaliacao
+from .models import Filme, Genero, Ator, Streaming, Avaliacao, Favorito
 from .forms import AvaliacaoForm
 from .tmdb import search_movie, movie_details, movie_credits, watch_providers
 
@@ -107,10 +107,14 @@ class Detalhes(View):
 
         # Avaliação do usuário atual
         avaliacao_usuario = None
+        is_favorito = False
         if request.user.is_authenticated:
             avaliacao_usuario = Avaliacao.objects.filter(
                 user=request.user, filme=filme
             ).first()
+            is_favorito = Favorito.objects.filter(
+                user=request.user, filme=filme
+            ).exists()
 
         # Todas as avaliações do filme
         avaliacoes = Avaliacao.objects.filter(filme=filme).select_related('user').order_by('-criado_em')
@@ -130,6 +134,8 @@ class Detalhes(View):
             "avaliacoes": avaliacoes[:10],  # Limita a 10 avaliações
             "media_avaliacoes": media_avaliacoes,
             "total_avaliacoes": total_avaliacoes,
+            "is_favorito": is_favorito,
+            "estrelas_range": range(1, 11),  # Range 1-10 para as estrelas
         }
         return render(request, self.template_name, ctx)
 
@@ -176,4 +182,24 @@ def excluir_avaliacao(request, filme_id):
         messages.success(request, f"Sua avaliação de '{filme.nome}' foi removida.")
     
     return redirect(f"/filmes/detalhes?id={filme.tmdb_id}")
+
+
+@login_required(login_url="contas:entrar")
+def favoritar_filme(request, filme_id):
+    """View para adicionar ou remover filme dos favoritos."""
+    filme = get_object_or_404(Filme, id=filme_id)
+    
+    favorito_existente = Favorito.objects.filter(user=request.user, filme=filme).first()
+    
+    if favorito_existente:
+        # Remove dos favoritos
+        favorito_existente.delete()
+        messages.success(request, f"'{filme.nome}' foi removido dos seus favoritos.")
+    else:
+        # Adiciona aos favoritos
+        Favorito.objects.create(user=request.user, filme=filme)
+        messages.success(request, f"'{filme.nome}' foi adicionado aos seus favoritos!")
+    
+    return redirect(f"/filmes/detalhes?id={filme.tmdb_id}")
+
 
