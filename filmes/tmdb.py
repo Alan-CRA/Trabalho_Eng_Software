@@ -47,3 +47,34 @@ def now_playing_movies(language="pt-BR", region="BR", page=1):
     r = requests.get(url, headers=get_headers(), params=params)
     r.raise_for_status()
     return r.json()
+
+
+def discover_movies(genre_ids=None, min_vote=6, sort_by="popularity.desc", page=1, language="pt-BR"):
+    """
+    Descobre filmes baseado em gêneros e outros filtros.
+    Usado pelo sistema de recomendação.
+    """
+    url = f"{BASE}discover/movie"
+    params = {
+        "language": language,
+        "sort_by": sort_by,
+        "vote_average.gte": min_vote,
+        "vote_count.gte": 50,  # Mínimo de votos para relevância
+        "page": page,
+        "include_adult": "false",
+    }
+    if genre_ids:
+        params["with_genres"] = ",".join(str(g) for g in genre_ids)
+    
+    r = requests.get(url, headers=get_headers(), params=params)
+    r.raise_for_status()
+    return r.json()
+
+
+def get_movie_genres(language="pt-BR"):
+    """Retorna a lista de gêneros disponíveis no TMDB."""
+    url = f"{BASE}genre/movie/list"
+    r = requests.get(url, headers=get_headers(), params={"language": language})
+    r.raise_for_status()
+    return r.json().get("genres", [])
+

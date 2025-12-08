@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Recomendações Para Você • CineRecomenda{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto">
+<div class="mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-amber-500 grid place-items-center">
+<svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+</div>
+<div>
+<h1 class="text-3xl font-bold text-zinc-50">Recomendações Para Você</h1>
+<p class="text-zinc-400">Filmes selecionados com base no seu gosto</p>
+</div>
+</div>
+</div>
+<div class="mb-6 p-4 rounded-xl border border-white/10 bg-white/5">
+<div class="flex items-center gap-3">
+{% if generos_preferidos %}<svg class="h-5 w-5 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="m12 3 2.1 6.47H21l-4.8 3.49L18.3 21 12 16.98 5.7 21l1.8-8.04L2 9.47h6.9L12 3Z"/></svg>{% else %}<svg class="h-5 w-5 text-zinc-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>{% endif %}
+<p class="text-zinc-300">{{ mensagem_status }}</p>
+</div>
+</div>
+{% if recomendados %}
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+{% for filme in recomendados %}
+<a href="/filmes/detalhes?id={{ filme.id }}" class="group">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-white/10 bg-zinc-800">
+{% if filme.poster_path %}<img src="{{ IMG }}w342{{ filme.poster_path }}" alt="Poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">{% else %}<div class="w-full h-full flex items-center justify-center text-zinc-500"><svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg></div>{% endif %}
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="absolute bottom-2 left-2 right-2">
+<div class="flex items-center gap-1 text-sm">
+<svg class="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="m12 3 2.1 6.47H21l-4.8 3.49L18.3 21 12 16.98 5.7 21l1.8-8.04L2 9.47h6.9L12 3Z"/></svg>
+<span class="text-white font-semibold">{{ filme.vote_average|floatformat:1 }}</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 px-2 py-1 rounded-full bg-rose-500/90 text-[10px] font-bold text-white uppercase tracking-wide">Para você</div>
+</div>
+{% with nome=filme.title %}<h3 class="mt-2 text-sm font-medium text-zinc-200 group-hover:text-rose-400 transition truncate">{{ nome }}</h3>{% endwith %}
+{% if filme.release_date %}<p class="text-xs text-zinc-500">{{ filme.release_date|slice:":4" }}</p>{% endif %}
+</a>
+{% endfor %}
+</div>
+{% else %}
+<div class="rounded-2xl border border-white/10 bg-[#18191f] p-12 text-center">
+<div class="grid h-20 w-20 mx-auto mb-4 place-items-center rounded-full bg-gradient-to-br from-rose-500/20 to-amber-500/20">
+<svg class="h-10 w-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+</div>
+<h3 class="text-xl font-semibold text-zinc-100 mb-2">Precisamos te conhecer melhor!</h3>
+<p class="text-zinc-400 mb-6 max-w-md mx-auto">Avalie alguns filmes com nota 7 ou superior para que possamos entender seu gosto e fazer recomendações personalizadas.</p>
+<div class="flex flex-col sm:flex-row gap-3 justify-center">
+<a href="/" class="inline-flex items-center justify-center gap-2 rounded-full bg-rose-600 hover:bg-rose-700 px-6 py-3 text-sm font-medium text-white shadow transition">Explorar Filmes</a>
+<a href="{% url 'contas:minhas_avaliacoes' %}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 px-6 py-3 text-sm font-medium text-zinc-100 transition">Minhas Avaliações ({{ total_avaliacoes }})</a>
+</div>
+</div>
+{% endif %}
+<div class="mt-8 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10">
+<div class="flex gap-3">
+<svg class="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="m12 3 2.1 6.47H21l-4.8 3.49L18.3 21 12 16.98 5.7 21l1.8-8.04L2 9.47h6.9L12 3Z"/></svg>
+<div>
+<p class="text-amber-200 font-medium text-sm">Como funciona?</p>
+<p class="text-amber-200/70 text-sm mt-1">Analisamos os gêneros dos filmes que você avaliou com nota 7 ou mais e buscamos filmes populares similares que você ainda não viu.</p>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

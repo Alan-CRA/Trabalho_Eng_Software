@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.db import transaction
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from .models import Filme, Genero, Ator, Streaming, Avaliacao, Favorito
 from .forms import AvaliacaoForm
-from .tmdb import search_movie, movie_details, movie_credits, watch_providers
+from .tmdb import search_movie, movie_details, movie_credits, watch_providers, discover_movies
 
 def _ensure_genres(genres):
     objs = []
@@ -203,3 +203,85 @@ def favoritar_filme(request, filme_id):
     return redirect(f"/filmes/detalhes?id={filme.tmdb_id}")
 
 
+@login_required(login_url="contas:entrar")
+def recomendacoes(request):
+    """
+    View para exibir recomendações personalizadas baseadas nas avaliações do usuário.
+    Algoritmo:
+    1. Pega filmes que o usuário avaliou bem (nota >= 7)
+    2. Identifica os gêneros mais frequentes desses filmes
+    3. Busca filmes populares desses gêneros na API TMDB
+    4. Filtra filmes que o usuário já avaliou ou favoritou
+    """
+    # Buscar avaliações positivas do usuário (nota >= 7)
+    avaliacoes_positivas = Avaliacao.objects.filter(
+        user=request.user,
+        nota__gte=7
+    ).select_related('filme').prefetch_related('filme__genero')
+    
+    # Coletar IDs de filmes já vistos/avaliados
+    filmes_vistos_ids = set(
+        Avaliacao.objects.filter(user=request.user).values_list('filme__tmdb_id', flat=True)
+    )
+    filmes_favoritos_ids = set(
+        Favorito.objects.filter(user=request.user).values_list('filme__tmdb_id', flat=True)
+    )
+    filmes_excluir = filmes_vistos_ids | filmes_favoritos_ids
+    
+    # Contar frequência de gêneros nas avaliações positivas
+    generos_contagem = {}
+    for av in avaliacoes_positivas:
+        for genero in av.filme.genero.all():
+            generos_contagem[genero.nome] = generos_contagem.get(genero.nome, 0) + 1
+    
+    # Mapear nomes de gêneros para IDs do TMDB
+    GENERO_TMDB_IDS = {
+        "Ação": 28, "Aventura": 12, "Animação": 16, "Comédia": 35,
+        "Crime": 80, "Documentário": 99, "Drama": 18, "Família": 10751,
+        "Fantasia": 14, "História": 36, "Terror": 27, "Música": 10402,
+        "Mistério": 9648, "Romance": 10749, "Ficção Científica": 878,
+        "Cinema TV": 10770, "Thriller": 53, "Guerra": 10752, "Faroeste": 37,
+    }
+    
+    # Pegar os 3 gêneros mais frequentes
+    generos_ordenados = sorted(generos_contagem.items(), key=lambda x: x[1], reverse=True)[:3]
+    generos_preferidos = [g[0] for g in generos_ordenados]
+    generos_ids = [GENERO_TMDB_IDS.get(g) for g in generos_preferidos if g in GENERO_TMDB_IDS]
+    
+    recomendados = []
+    mensagem_status = ""
+    
+    if generos_ids:
+        # Buscar filmes recomendados via API TMDB
+        try:
+            payload = discover_movies(genre_ids=generos_ids, min_vote=6.5, page=1)
+            results = payload.get("results", [])
+            
+            # Filtrar filmes já vistos e mapear para formato padrão
+            for movie in results:
+                if movie.get("id") not in filmes_excluir:
+                    recomendados.append({
+                        "id": movie.get("id"),
+                        "title": movie.get("title", ""),
+                        "poster_path": movie.get("poster_path"),
+                        "vote_average": movie.get("vote_average"),
+                        "release_date": movie.get("release_date", ""),
+                        "overview": movie.get("overview", "")[:150] + "..." if movie.get("overview") else "",
+                    })
+                if len(recomendados) >= 12:
+                    break
+                    
+            mensagem_status = f"Baseado nos seus gêneros favoritos: {', '.join(generos_preferidos)}"
+        except Exception as e:
+            mensagem_status = "Não foi possível carregar recomendações no momento."
+    else:
+        mensagem_status = "Avalie mais filmes com nota 7 ou superior para receber recomendações personalizadas!"
+    
+    context = {
+        "recomendados": recomendados,
+        "generos_preferidos": generos_preferidos,
+        "mensagem_status": mensagem_status,
+        "total_avaliacoes": Avaliacao.objects.filter(user=request.user).count(),
+        "IMG": settings.TMDB_IMAGE_BASE_URL,
+    }
+    return render(request, "filmes/recomendacoes.html", context)

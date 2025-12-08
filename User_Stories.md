@@ -66,3 +66,24 @@ Alta
 
 ## Estimativa
 5 pontos
+
+## US5 - Recomendação de Filmes
+
+### Descrição
+Como usuário autenticado, quero receber recomendações de filmes baseadas no meu histórico de avaliações, para que eu possa descobrir novos filmes que combinem com meu gosto.
+
+### Critérios de aceitação:
+1. O sistema deve analisar os filmes que o usuário avaliou positivamente (nota >= 7).
+2. O sistema deve identificar os gêneros preferidos do usuário com base nas avaliações.
+3. O sistema deve buscar filmes populares dos gêneros identificados.
+4. Os filmes recomendados não devem incluir filmes que o usuário já avaliou ou favoritou.
+5. A página de recomendações deve exibir até 12 filmes sugeridos.
+6. Uma mensagem deve indicar os gêneros que geraram as recomendações.
+7. Usuários sem avaliações suficientes devem ver um convite para avaliar mais filmes.
+8. A página de recomendações deve ser acessível a partir do perfil do usuário.
+
+## Prioridade
+Alta
+
+## Estimativa
+5 pontos

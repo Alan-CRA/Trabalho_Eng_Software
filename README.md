@@ -80,13 +80,20 @@ python manage.py runserver
 - Página de perfil com estatísticas do usuário
 - Logout com confirmação
 
-### US4 - Avaliação de Filmes ⭐ (NOVA)
+### US4 - Avaliação de Filmes ⭐
 - Sistema de avaliação com notas de 1 a 10 estrelas
 - Comentários opcionais nas avaliações
 - Edição e exclusão de avaliações
 - Média das avaliações dos usuários exibida no filme
 - Histórico de avaliações no perfil do usuário
 
+### US5 - Recomendação de Filmes 💡 (NOVA)
+- Sistema de recomendação baseado nas avaliações do usuário
+- Análise dos gêneros preferidos (filmes com nota >= 7)
+- Busca de filmes populares dos gêneros identificados
+- Filtra filmes já avaliados ou favoritados
+- Página dedicada com até 12 recomendações personalizadas
+- Mensagem indicando os gêneros que geraram as sugestões
 
 ## Estrutura do Projeto
 

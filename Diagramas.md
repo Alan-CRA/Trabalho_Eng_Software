@@ -9,6 +9,7 @@ O diagrama comportamental desenvolvido representa o **fluxo de ações e decisõ
 - **UC-02 — Detalhamento do filme:** o usuário acessa uma página de informações do filme, contendo sinopse, elenco, gênero e links para streaming.  
 - **UC-03 — Autenticação de usuários:** o usuário pode criar uma conta, realizar login e recuperar senha em caso de esquecimento.
 - **UC-04 — Avaliação de filmes:** o usuário autenticado pode avaliar filmes com nota (1-10 estrelas) e comentário opcional, editar ou excluir suas avaliações, e visualizar o histórico de avaliações em seu perfil.
+- **UC-05 — Recomendação de filmes:** o sistema analisa os gêneros dos filmes bem avaliados pelo usuário (nota >= 7) e sugere filmes populares similares que ele ainda não assistiu.
 
 ### Justificativa
 A escolha por um **diagrama comportamental** (Diagrama de Atividades) foi feita porque ele:
